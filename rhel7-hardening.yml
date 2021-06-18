@@ -1,0 +1,152 @@
+---
+- name: RHEL 7 Hardening for HCL  
+  hosts: all
+  remote_user: root
+  tasks:    
+    - name: Ensure Avahi Server is Disable
+      service:
+        name: avahi-daemon
+        state: stopped
+      ignore_errors: true  
+
+    - name: Ensure cron is installed
+      yum:
+        name: cronie
+        state: present
+      
+    - name:  Ensure cron daemon is enabled
+      service:
+        name: "crond"
+        enabled: true
+        state: started
+      ignore_errors: false
+  
+
+    - name: "Ensure SSH Protocol is set to 2"
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: '^Protocol'
+        line: 'Protocol 2'
+      
+    - name: "Ensure SSH Idle Timeout Interval is configured"
+      replace:
+        dest: /etc/ssh/sshd_config
+        regexp: '^ClientAliveInterval(.*)?$'
+        replace: 'ClientAliveInterval 300'
+        backup: yes
+      ignore_errors: yes
+
+
+# 5.3.4 Ensure password hashing algorithm is SHA-512
+
+    - name: Check password hashing algorithm is SHA-512
+      command: awk /sha512/ /etc/pam.d/password-auth
+      register: sha512_check
+      changed_when: false
+      
+    - name: Ensure password hashing algorithm is SHA-512
+      command: "authconfig --update --passalgo=sha512"
+      when: sha512_check.stdout is undefined
+      changed_when: false
+  
+    - name: Ensure all password configuration is up to date
+      command: "authconfig --updateall"
+      changed_when: false
+
+    - name:  Ensure rsyslog is installed
+      yum:
+        name: "{{ item.name }}"
+        state: "{{ item.state }}"
+      with_items:
+        - { name: "rsyslog", state: "present" }
+        - { name: "syslog-ng", state: "absent" }
+      ignore_errors: true
+
+    - name: Ensure syslog-ng is installed
+      yum:
+        name: "{{ item.name }}"
+        state: "{{ item.state }}"
+      with_items:
+        - { name: "rsyslog", state: "absent" }
+        - { name: "syslog-ng", state: "present" }
+      ignore_errors: true    
+
+
+    - name: Ensure mounting of cramfs filesystems is disabled"
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install cramfs(\\s|$)"
+        line: "install cramfs /bin/true"
+        create: yes
+
+    - name: "Ensure mounting of freevxfs filesystems is disabled"
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install freevxfs(\\s|$)"
+        line: "install freevxfs /bin/true"
+        create: yes
+
+
+    - name: "Ensure mounting of jffs2 filesystems is disabled"
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install jffs2(\\s|$)"
+        line: "install jffs2 /bin/true"
+        create: yes
+
+
+    - name: "Ensure mounting of hfs filesystems is disabled"
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install hfs(\\s|$)"
+        line: "install hfs /bin/true"
+        create: yes
+
+
+    - name: "SEnsure mounting of hfsplus filesystems is disabled"
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install hfsplus(\\s|$)"
+        line: "install hfsplus /bin/true"
+        create: yes
+
+
+    - name: "Ensure mounting of squashfs filesystems is disabled"
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install squashfs(\\s|$)"
+        line: "install squashfs /bin/true"
+        create: yes
+  
+
+    - name: "Ensure mounting of udf filesystems is disabled"
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install udf(\\s|$)"
+        line: "install udf /bin/true"
+        create: yes
+
+
+    - name: "Ensure gpgcheck is globally activated"
+      replace:
+        name: /etc/yum.conf
+        regexp: "^gpgcheck=0"
+        replace: "gpgcheck=1"
+  
+
+    - name: "Ensure the SELinux state is enforcing"
+      selinux:
+        conf: /etc/selinux/config
+        policy: "targeted"
+        state: enforcing
+  
+
+    - name: Set permissions on grub configuration
+      file:
+        path: /boot/grub2/grub.cfg
+        owner: root
+        group: root
+        mode:  "og-rwx"
+        state: file
+  
