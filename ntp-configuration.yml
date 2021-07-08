@@ -4,7 +4,7 @@
     ntpserver1: "10.96.4.65" 
   tasks:
   - name: set timezone
-    shell: timedatectl set-timezone Europe/Berlin
+    shell: timedatectl set-timezone Asia/Kolkata
 
   - name: Install NTP
     yum: name=chrony state=installed 
