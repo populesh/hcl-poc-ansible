@@ -17,7 +17,7 @@
     tags: ntp
  
   - name: Make sure NTP is stopped
-    service: name=chronyd state=stopped enabled=yes
+    service: name=ntpd state=stopped enabled=yes
     tags: ntp
  
   - name: Sync time initialy
@@ -26,7 +26,7 @@
     ignore_errors: yes
 
   - name: Make sure NTP is started up
-    service: name=chronyd state=started enabled=yes
+    service: name=ntpd state=started enabled=yes
     tags: ntp
 
   - name: Sync hwclock
@@ -35,4 +35,4 @@
 
   handlers:
   - name: restart ntpd
-    service: name=chronyd state=restarted
+    service: name=ntpd state=restarted
