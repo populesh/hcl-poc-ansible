@@ -24,7 +24,7 @@
     - name: "Ensure SSH Protocol is set to 2"
       replace:
         dest: /etc/ssh/sshd_config
-        regexp: '^ Protocol(.*)?$'
+        regexp: '^ Protocol(.*)'
         replace: 'Protocol 2'
       
     - name: "Ensure SSH Idle Timeout Interval is configured"
