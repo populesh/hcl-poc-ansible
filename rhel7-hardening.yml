@@ -23,11 +23,11 @@
   
 
     - name: "Ensure SSH Protocol is set to 2"
-      lineinfile:
+      replace:
         state: present
         dest: /etc/ssh/sshd_config
         regexp: '^Protocol'
-        line: 'Protocol 2'
+        replace: 'Protocol 2'
       
     - name: "Ensure SSH Idle Timeout Interval is configured"
       replace:
