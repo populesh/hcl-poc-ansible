@@ -7,7 +7,7 @@
     shell: timedatectl set-timezone Asia/Kolkata
 
   - name: Install NTP
-    yum: name=chrony state=installed 
+    yum: name=ntp state=installed 
     tags: ntp
  
   - name: Copy over the NTP configuration
