@@ -1,7 +1,7 @@
 - name: configure NTP Server  
   hosts: all
   vars:
-    ntpserver1: "172.16.20.1" 
+    ntpserver1: "10.96.4.65" 
   tasks:
   - name: set timezone
     shell: timedatectl set-timezone Europe/Berlin
