@@ -20,7 +20,6 @@
         enabled: true
         state: started
       ignore_errors: false
-  
 
     - name: "Ensure SSH Protocol is set to 2"
       replace:
