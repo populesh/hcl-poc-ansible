@@ -62,8 +62,6 @@
       become: true
       become_method: sudo
       #when: net|success
-
-
     - name: Removing any insight package
       yum:
         name: "insights-client"
@@ -71,19 +69,16 @@
       become: true
       become_method: sudo
       #when: net|success
-
-
     - name: Downloading katello agent from {{ host_satellite }}
       yum:
         name: "http://{{ host_satellite }}/pub/katello-ca-consumer-latest.noarch.rpm"
         state: present
+        disable_gpg_check: yes
       become: true
       become_method: sudo
-      disable_gpg_check: yes
+  
       register: katello
       #when: net|success
-
-
     - name: Registering the system against {{ host_satellite }}
       redhat_subscription:
         state: present
@@ -94,8 +89,6 @@
       #when:
        # - net|success
         #- katello|success
-
-
     - name: Checking active YUM repositories
       shell: yum repolist | grep -v This | grep server
       register: repolist
@@ -103,18 +96,14 @@
       become: true
       become_method: sudo
       #when: net|success
-
-
     - name: Installing katello-agent
       yum:
         name: katello-agent
         state: present
+        disable_gpg_check: yes
       become: true
       become_method: sudo
-      disable_gpg_check: yes
-      #when: net|success
-
-
+            #when: net|success
     - name: Installing insights client
       yum:
         name: insights-client
