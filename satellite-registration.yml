@@ -79,6 +79,7 @@
         state: present
       become: true
       become_method: sudo
+      disable_gpg_check: true
       register: katello
       #when: net|success
 
@@ -110,6 +111,7 @@
         state: present
       become: true
       become_method: sudo
+      disable_gpg_check: true
       #when: net|success
 
 
