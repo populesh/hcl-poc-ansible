@@ -34,7 +34,7 @@
         replace: '#proxy'
       become: true
       become_method: sudo
-      when: net|success
+      #when: net|success
 
 
     - name: Commenting out proxy on /etc/rhsm/rhsm.conf
@@ -44,14 +44,14 @@
         replace: '#proxy'
       become: true
       become_method: sudo
-      when: net|success
+      #when: net|success
 
 
     - name: Checking proxy in the env
       shell: env | grep -i http
       register: proxy
       failed_when: proxy == 0
-      when: net|success
+      #when: net|success
 
 
 
@@ -61,7 +61,7 @@
         state: absent
       become: true
       become_method: sudo
-      when: net|success
+      #when: net|success
 
 
     - name: Removing any insight package
@@ -70,7 +70,7 @@
         state: absent
       become: true
       become_method: sudo
-      when: net|success
+      #when: net|success
 
 
     - name: Downloading katello agent from {{ host_capsule }}
@@ -80,7 +80,7 @@
       become: true
       become_method: sudo
       register: katello
-      when: net|success
+      #when: net|success
 
 
     - name: Registering the system against {{ host_capsule }}
@@ -90,9 +90,9 @@
         org_id: "{{ org_id }}"
       become: true
       become_method: sudo
-      when:
-        - net|success
-        - katello|success
+      #when:
+       # - net|success
+        #- katello|success
 
 
     - name: Checking active YUM repositories
@@ -101,7 +101,7 @@
       failed_when: repolist == 1
       become: true
       become_method: sudo
-      when: net|success
+      #when: net|success
 
 
     - name: Installing katello-agent
@@ -110,7 +110,7 @@
         state: present
       become: true
       become_method: sudo
-      when: net|success
+      #when: net|success
 
 
     - name: Installing insights client
@@ -119,14 +119,14 @@
         state: present
       become: true
       become_method: sudo
-      when: net|success
+      #when: net|success
 
 
     - name: Collecting insights client data
       shell: insights-client --register
       become: true
       become_method: sudo
-      when: net|success
+      #when: net|success
       register: insight
 
     - debug:
