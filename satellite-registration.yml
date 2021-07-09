@@ -9,7 +9,7 @@
     
   tasks:
 
-    - name: Check network connectivity to {{ host_capsule }}
+    - name: Check network connectivity to {{ host_satellite }}
       wait_for:
         host: "{{ ip_satellite }}"
         port: "{{ item }}"
@@ -73,7 +73,7 @@
       #when: net|success
 
 
-    - name: Downloading katello agent from {{ host_capsule }}
+    - name: Downloading katello agent from {{ host_satellite }}
       yum:
         name: "http://{{ host_satellite }}/pub/katello-ca-consumer-latest.noarch.rpm"
         state: present
@@ -83,7 +83,7 @@
       #when: net|success
 
 
-    - name: Registering the system against {{ host_capsule }}
+    - name: Registering the system against {{ host_satellite }}
       redhat_subscription:
         state: present
         activationkey: "{{ registration_key_rhel }}"
