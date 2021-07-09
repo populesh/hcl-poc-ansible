@@ -1,6 +1,6 @@
 - name: Satellite Registration Playbook 
   gather_facts: false
-  hosts: all
+  hosts: satellite_unregister
   vars:
     ip_satellite: 1.1.1.1
     registration_key_rhel: test 
