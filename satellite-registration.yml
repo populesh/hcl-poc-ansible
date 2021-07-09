@@ -131,3 +131,4 @@
 
     - debug:
         var: "{{ insight.stdout }}"
+      ignore_errors: true
