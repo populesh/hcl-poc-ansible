@@ -1,0 +1,71 @@
+---
+- name: This is first Play book
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ping Result
+      ping:
+
+- name: This is second play book
+  hosts: all
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Add the user
+      user:
+        name: rhnadmin
+
+- name: This is third play book
+  hosts: all
+  tasks:
+    - name: crate a directory for ssh
+      file:
+        path: /home/rhnadmin/.ssh
+        state: directory
+        owner: rhnadmin
+        group: rhnadmin
+        mode: '0700'
+
+- name: playbook for password
+  hosts: all
+  gather_facts: no
+  become: true
+  tasks:
+   - name: change rhnadmin password
+     user:
+        name: rhnadmin
+        update_password: always
+        password: "$6$Em/FCoDJ9ZxGGi2/$vjGm6FPZxEFg/qAQ7GPj.KargrtXZOD1oOFM5X99XXIQ9rHZ3XS85zMC0ka4OMTRiE0Nu.Fn5WdadWFJNsiA4."
+
+
+- name: This is third Play book
+  hosts: all
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Add the user in sudo file
+      lineinfile:
+          path: /etc/sudoers
+          state: present
+          regexp: '^rhnadmin'
+          line: 'rhnadmin ALL=(ALL) NOPASSWD: ALL'
+
+- name: Disable permit root
+  hosts: all
+  become: true
+  tasks:
+   - name: permit root login no
+     lineinfile:
+       dest: /etc/ssh/sshd_config
+       regexp: '^PermitRootLogin'
+       line: 'PermitRootLogin no'
+
+- name: service restart
+  hosts: all
+  become: true
+  tasks:
+   - name: ssh service restart
+     service:
+       name: sshd
+       state: restarted
+
