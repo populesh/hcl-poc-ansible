@@ -15,16 +15,16 @@
       user:
         name: rhnadmin
 
-- name: This is third play book
-  hosts: all
-  tasks:
-    - name: crate a directory for ssh
-      file:
-        path: /home/rhnadmin/.ssh
-        state: directory
-        owner: rhnadmin
-        group: rhnadmin
-        mode: '0700'
+#- name: This is third play book
+ # hosts: all
+  #tasks:
+   # - name: crate a directory for ssh
+    #  file:
+     #   path: /home/rhnadmin/.ssh
+      #  state: directory
+       # owner: rhnadmin
+        #group: rhnadmin
+        #mode: '0700'
 
 - name: playbook for password
   hosts: all
