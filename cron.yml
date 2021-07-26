@@ -1,5 +1,6 @@
 - name: check rechability issue
   hosts: all
+  become: yes
   tasks:
     - name: ping the servers
       ping:
