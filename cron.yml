@@ -1,0 +1,18 @@
+- name: check rechability issue
+  hosts: all
+  tasks:
+    - name: ping the servers
+      ping:
+    - name: need to copyu scripts file
+      copy:
+        src: /etc/besclient_cache_clear.sh
+        dest: /etc
+        owner: root
+        group: root
+        mode: '0755'
+    - name: need to schdule in cron tab
+      cron:
+        weekday: 6
+        minute: '00'
+        hour: 10
+        job: /etc/besclient_cache_clear.sh
