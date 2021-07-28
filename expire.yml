@@ -2,7 +2,7 @@
   gather_facts: no
   tasks:
   - name: Set password if expired
-    delegate_to: 127.0.0.1
+   # delegate_to: 127.0.0.1
     become: no
     expect:
       command: ssh -o "StrictHostKeyChecking=no" rhnadmin@{{ inventory_hostname }}
